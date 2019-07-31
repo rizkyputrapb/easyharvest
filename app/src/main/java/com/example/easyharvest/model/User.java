@@ -1,4 +1,4 @@
-package com.example.easyharvest;
+package com.example.easyharvest.model;
 
 public class User {
     private String id;

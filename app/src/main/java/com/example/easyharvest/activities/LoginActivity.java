@@ -1,7 +1,8 @@
-package com.example.easyharvest;
+package com.example.easyharvest.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.easyharvest.R;
+import com.example.easyharvest.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -33,10 +36,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView tvForgotPassword;
 
     private FirebaseAuth mAuth;
-    private FirebaseDatabase myDatabase;
-    private DatabaseReference myRef;
 
     private ProgressBar progressBar;
+    private FirebaseDatabase myDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        myDatabase = FirebaseDatabase.getInstance();
 
         emailLogin = findViewById(R.id.edit_text_email_login);
         passwordLogin = findViewById(R.id.edit_text_password_login);
@@ -74,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void login() {
         String email = emailLogin.getText().toString().trim();
-        String password = emailLogin.getText().toString().trim();
+        String password = passwordLogin.getText().toString().trim();
 
         if (email.isEmpty()) {
             String emptyEmailMessage = getResources().getString(R.string.email_is_required);
@@ -106,49 +109,58 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         progressBar.setVisibility(View.VISIBLE);
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
 
-                    final FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                updateUI(user);
+                            }
+
+                        } else {
+                            String errorConnection = getResources().getString(R.string.please_check_your_connection);
+
+                            progressBar.setVisibility(View.GONE);
+
+                            Toast.makeText(LoginActivity.this, errorConnection, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void updateUI(FirebaseUser firebaseUser) {
+
+        if (firebaseUser != null) {
+            DatabaseReference myRef = myDatabase.getReference("users").child(firebaseUser.getUid());
+
+            ValueEventListener listener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
 
                     if (user != null) {
-                        myRef.addValueEventListener(new ValueEventListener() {
-
-                            String loggedInSuccessfullyMessage = getResources().getString(R.string.logged_in_succesfully);
-
-
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                User data = dataSnapshot.getValue(User.class);
-
-                                if (data.getRole().equalsIgnoreCase("Farmer") ||
-                                        data.getRole().equalsIgnoreCase("Petani")) {
-                                    //intent ke halaman awal petani
-                                    Toast.makeText(LoginActivity.this, loggedInSuccessfullyMessage, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    //intent ke halaman awal petugas
-                                    Toast.makeText(LoginActivity.this, loggedInSuccessfullyMessage, Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                        if (user.getRole().equalsIgnoreCase("Farmer")) {
+                            progressBar.setVisibility(View.GONE);
+                            //intent to homescreen as farmer
+                            Log.d(LoginActivity.class.getSimpleName(), "Login as farmer");
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            //intent to homescreen as officer
+                            Log.d(LoginActivity.class.getSimpleName(), "Login as officer");
+                        }
                     }
-                } else {
-                    String errorConnection = getResources().getString(R.string.please_check_your_connection);
-
-                    progressBar.setVisibility(View.GONE);
-
-                    Toast.makeText(LoginActivity.this, errorConnection, Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+
+            myRef.addListenerForSingleValueEvent(listener);
+        }
     }
 }
