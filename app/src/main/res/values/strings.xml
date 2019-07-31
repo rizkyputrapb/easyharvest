@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">EasyHarvest</string>
+    <string name="hint_enter_email">Enter Your Email Here</string>
+    <string name="hint_enter_password">Enter Your Password Here</string>
+    <string name="button_login">Login</string>
+    <string name="text_register_account">Don\'t have an account? Register here!</string>
+    <string name="register_page">Register Page</string>
+    <string name="hint_enter_name">Enter Your Name Here</string>
+    <string name="text_forgot_password">Forgot your password?</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register_as">Register as:</string>
+    <string name="button_register">Register</string>
+    <string name="email_is_required">Email is required</string>
+    <string name="password_is_required">Password is required</string>
+    <string name="please_enter_the_email_correctly">Please enter the email correctly</string>
+    <string name="the_password_must_be_at_least_6_characters">The password must be at least 6 characters</string>
+    <string name="user_registered_successfully">You are registered successfully</string>
+    <string name="user_already_registered">You are already registered</string>
+    <string name="please_check_your_connection">Please check your connection</string>
+    <string name="logged_in_succesfully">Logged in successfully</string>
+    <string name="please_enter_your_name_here">Please enter your name here</string>
+
+    <string-array name="roles">
+        <item>Farmer</item>
+        <item>Service Officer</item>
+    </string-array>
+</resources>

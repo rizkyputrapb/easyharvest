@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "384256133475",
+    "firebase_url": "https://easyharvest-45d24.firebaseio.com",
+    "project_id": "easyharvest-45d24",
+    "storage_bucket": "easyharvest-45d24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384256133475:android:d94956fe22efae00",
+        "android_client_info": {
+          "package_name": "com.example.easyharvest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "384256133475-n96usgjo1t7i2rra7tstj47t830019mh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.easyharvest",
+            "certificate_hash": "5d6c112faef1861b1ee932698533040f2e3deee2"
+          }
+        },
+        {
+          "client_id": "384256133475-ki12sqouu1s4g84p5hm5g9kbh77v6nmm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgOqHwGcq9F0FJGDknAmKhcMkAozBrKow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "384256133475-ki12sqouu1s4g84p5hm5g9kbh77v6nmm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
